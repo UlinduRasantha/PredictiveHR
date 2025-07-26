@@ -4,7 +4,7 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 
-const hii = () => {
+const App = () => {
   return (
     <div>
       <BrowserRouter>
@@ -18,4 +18,4 @@ const hii = () => {
   );
 };
 
-export default hii;
+export default App;

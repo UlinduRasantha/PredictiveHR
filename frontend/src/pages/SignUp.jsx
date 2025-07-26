@@ -11,7 +11,7 @@ import {
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  //const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100 p-4">
