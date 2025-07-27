@@ -1,21 +1,82 @@
 import React, { useState } from "react";
-import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Mail, Lock, Eye, EyeOff, ArrowLeft, AlertCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/login",
+        {
+         
+          username: formData.email,
+          password: formData.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+
+     
+      login(response.data.access_token);
+      navigate("/dashboard");
+    } catch (err) {
+     
+      if (err.response && err.response.data && err.response.data.detail) {
+        setError(err.response.data.detail);
+      } else {
+        setError("Login failed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100 p-4">
-      {/* Header Text */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Welcome back</h1>
         <p className="text-gray-600 mt-2">Login to your account to continue</p>
       </div>
 
-      {/* Login Card */}
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Error Message Display */}
+          {error && (
+            <div
+              className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50"
+              role="alert"
+            >
+              <AlertCircle className="flex-shrink-0 inline w-5 h-5 mr-3" />
+              <span className="font-medium">{error}</span>
+            </div>
+          )}
+
           {/* Email Input */}
           <div>
             <label
@@ -34,6 +95,8 @@ const Login = () => {
                 type="email"
                 autoComplete="email"
                 required
+                value={formData.email}
+                onChange={handleChange}
                 className="block w-full rounded-md border-gray-300 py-3 pl-10 pr-3 text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 placeholder="Enter your email"
               />
@@ -58,6 +121,8 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 required
+                value={formData.password}
+                onChange={handleChange}
                 className="block w-full rounded-md border-gray-300 py-3 pl-10 pr-10 text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 placeholder="Enter your password"
               />
@@ -76,7 +141,6 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Remember Me & Forgot Password */}
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -106,14 +170,14 @@ const Login = () => {
           <div>
             <button
               type="submit"
-              className="w-full cursor-pointer flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              disabled={loading}
+              className="w-full cursor-pointer flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300"
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
           </div>
         </form>
 
-        {/* Separator */}
         <div className="relative my-6">
           <div
             className="absolute inset-0 flex items-center"
@@ -128,13 +192,11 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Create Account Button */}
         <div>
           <Link to="/register">
             <button
-              href="/register"
               type="button"
-              className="w-full  cursor-pointer flex justify-center py-3 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="w-full cursor-pointer flex justify-center py-3 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Create your account
             </button>
@@ -142,15 +204,14 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Back to Homepage Link */}
       <div className="mt-8">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="flex items-center justify-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to homepage
-        </a>
+        </Link>
       </div>
     </div>
   );
