@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 
-
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,35 +21,25 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/login",
-        {
-         
-          username: formData.email,
-          password: formData.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
+        'http://127.0.0.1:8000/api/login',
+        formData // Send the JS object directly
       );
-
-     
+      
       login(response.data.access_token);
-      navigate("/dashboard");
+      navigate('/dashboard');
+
     } catch (err) {
-     
       if (err.response && err.response.data && err.response.data.detail) {
         setError(err.response.data.detail);
       } else {
-        setError("Login failed. Please try again.");
+        setError('Login failed. Please try again.');
       }
     } finally {
       setLoading(false);
