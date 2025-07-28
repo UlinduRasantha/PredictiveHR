@@ -4,6 +4,8 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import AuthProvider from "./context/AuthContext";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from './components/ProtectedRoute'; 
 
 const App = () => {
   return (
@@ -13,6 +15,11 @@ const App = () => {
           <Route index element={<HomePage />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<SignUp />} />
+          <Route path="dashboard" element={
+            <ProtectedRoute>
+              <Dashboard/>
+            </ProtectedRoute>
+          } />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
