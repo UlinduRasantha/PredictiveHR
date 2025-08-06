@@ -125,7 +125,7 @@ const Dashboard = () => {
     };
 
     try {
-      const resp = await fetch("http://localhost:8000/predictapi/predict", {
+      const resp = await fetch("http://localhost:8000/api/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
