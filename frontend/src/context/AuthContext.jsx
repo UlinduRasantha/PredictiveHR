@@ -1,9 +1,24 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === 'token') {
+        setToken(event.newValue);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   const login = (newToken) => {
     setToken(newToken);
@@ -19,6 +34,7 @@ const AuthProvider = ({ children }) => {
     token,
     login,
     logout,
+    isAuthenticated: !!token,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

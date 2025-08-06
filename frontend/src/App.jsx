@@ -1,11 +1,11 @@
-import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import AuthProvider from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from './components/ProtectedRoute'; 
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 
 const App = () => {
   return (
@@ -13,13 +13,30 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route index element={<HomePage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<SignUp />} />
-          <Route path="dashboard" element={
-            <ProtectedRoute>
-              <Dashboard/>
-            </ProtectedRoute>
-          } />
+          <Route
+            path="login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="register"
+            element={
+              <PublicRoute>
+                <SignUp />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
