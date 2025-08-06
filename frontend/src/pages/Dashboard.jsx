@@ -374,7 +374,7 @@ const Dashboard = () => {
                     style={{
                       width: `${
                         probability !== null
-                          ? ((1 - probability) * 100).toFixed(2)
+                          ? ((probability) * 100).toFixed(2)
                           : 0
                       }%`,
                       transition: "width 400ms ease",
@@ -383,7 +383,7 @@ const Dashboard = () => {
                 </div>
                 <div className="mt-2 text-sm text-gray-700">
                   {probability !== null
-                    ? `${((1 - probability) * 100).toFixed(2)}%`
+                    ? `${((probability) * 100).toFixed(2)}%`
                     : "N/A"}
                 </div>
               </div>
@@ -431,7 +431,7 @@ const Dashboard = () => {
                     </strong>{" "}
                     —{" "}
                     {h.probability !== null
-                      ? `${((1 - h.probability) * 100).toFixed(2)}%`
+                      ? `${((h.probability) * 100).toFixed(2)}%`
                       : "N/A"}
                   </div>
                   <details className="mt-2 text-xs text-gray-600">
