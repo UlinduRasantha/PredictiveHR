@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
-from .routers import auth
+from .routers import auth, prediction
 import os
 
 Base.metadata.create_all(bind=engine)
@@ -23,12 +23,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],  
+    allow_headers=["*"],  
 )
 
 # --- Routers ---
 app.include_router(auth.router, prefix="/api", tags=["Authentication"])
+app.include_router(prediction.router, prefix="/api", tags=["Prediction"])
 
 # --- Root Endpoint ---
 @app.get("/api", tags=["Root"])
