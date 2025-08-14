@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { BarChart3, LogOut, LayoutDashboard } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -70,6 +70,9 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-4">
+            <Link to="/about-us" className="font-semibold">
+              About us
+            </Link>
             {isAuthenticated ? (
               <>
                 {onHomePage && (
@@ -125,6 +128,9 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-2 sm:px-3">
+            <Link to="/about-us" className="font-semibold">
+              About us
+            </Link>
             {isAuthenticated ? (
               <>
                 {/* 6. Same logic for mobile menu */}

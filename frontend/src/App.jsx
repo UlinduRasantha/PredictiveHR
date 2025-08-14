@@ -6,6 +6,7 @@ import AuthProvider from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
+import AboutUs from "./pages/AboutUs";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
               </PublicRoute>
             }
           />
+          <Route path="about-us" element={<AboutUs />} />
           <Route
             path="/dashboard"
             element={
